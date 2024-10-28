@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <form method="POST">
+        {% for question in questions %}
+            <fieldset>
+                <legend>{{ question.question_text }}</legend>
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="1"> {{ question.answer_a }}
+                </label><br>
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="2"> {{ question.answer_b }}
+                </label><br>
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="3"> {{ question.answer_c }}
+                </label><br>
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="4"> {{ question.answer_d }}
+                </label><br>
+            </fieldset>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

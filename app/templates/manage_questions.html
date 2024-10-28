@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Questions</title>
+</head>
+<body>
+    <h1>Manage Questions</h1>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.question_text.label }} {{ form.question_text() }}<br>
+        {{ form.answer_a.label }} {{ form.answer_a() }}<br>
+        {{ form.answer_b.label }} {{ form.answer_b() }}<br>
+        {{ form.answer_c.label }} {{ form.answer_c() }}<br>
+        {{ form.answer_d.label }} {{ form.answer_d() }}<br>
+        {{ form.correct_answer_id.label }} {{ form.correct_answer_id() }}<br>
+        {{ form.submit() }}
+    </form>
+
+    <h2>Existing Questions</h2>
+    <ul>
+        {% for question in questions %}
+            <li>{{ question.question_text }} - Answers: [A: {{ question.answer_a }} | B: {{ question.answer_b }} | C: {{ question.answer_c }} | D: {{ question.answer_d }}]</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
