@@ -2,3 +2,4 @@ add_quiz_questions.py
 clear_quiz_questions.py
 .env
 __pycache__
+count_quiz_questions.py

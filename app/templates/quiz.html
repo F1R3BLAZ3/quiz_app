@@ -8,9 +8,10 @@
 <body>
     <h1>Quiz</h1>
     <form method="POST">
+        {{ form.hidden_tag() }}  <!-- CSRF token -->
         {% for question in questions %}
             <fieldset>
-                <legend>{{ question.question_text }}</legend>
+                <legend>Question {{ loop.index }}: {{ question.question_text }}</legend>
                 <label>
                     <input type="radio" name="question_{{ question.id }}" value="1"> {{ question.answer_a }}
                 </label><br>

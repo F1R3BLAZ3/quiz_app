@@ -18,5 +18,10 @@ class QuestionForm(FlaskForm):
     answer_b = StringField('Answer B', validators=[DataRequired()])
     answer_c = StringField('Answer C', validators=[DataRequired()])
     answer_d = StringField('Answer D', validators=[DataRequired()])
-    correct_answer_id = SelectField('Correct Answer', choices=[('1', 'Answer A'), ('2', 'Answer B'), ('3', 'Answer C'), ('4', 'Answer D')], validators=[DataRequired()])
+    correct_answer_id = SelectField('Correct Answer', 
+                                     choices=[('1', 'Answer A'), 
+                                              ('2', 'Answer B'), 
+                                              ('3', 'Answer C'), 
+                                              ('4', 'Answer D')], 
+                                     validators=[DataRequired()])
     submit = SubmitField('Add Question')

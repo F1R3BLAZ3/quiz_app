@@ -60,12 +60,21 @@ def quiz():
         flash('No questions available for the quiz.', 'warning')
         return redirect(url_for('dashboard'))
 
+    form = QuestionForm()  # Create an empty form instance for CSRF token
+
     if request.method == 'POST':
+        print(request.form)  # Debugging line to log form data
+
         score = 0
         total_questions = len(questions)
 
+        # Store the user's answers for analysis
+        user_answers = {}
+
         for question in questions:
             selected_answer = request.form.get(f'question_{question.id}')
+            print(f'Question ID: {question.id}, Selected Answer: {selected_answer}, Correct Answer ID: {question.correct_answer_id}')  # Debugging line
+            user_answers[question.id] = selected_answer
             if selected_answer and selected_answer == str(question.correct_answer_id):
                 score += 1
 
@@ -74,10 +83,42 @@ def quiz():
         db.session.add(result)
         db.session.commit()
 
-        flash(f'You scored {score} out of {total_questions}.', 'success')
-        return redirect(url_for('dashboard'))
+        # Store results in the session for analysis
+        session['score'] = score
+        session['total_questions'] = total_questions
+        session['questions'] = [
+            {
+                'question_text': question.question_text,
+                'correct_answer_id': question.correct_answer_id,
+                'user_answer': user_answers.get(question.id),
+                'correct_answer_text': [
+                    question.answer_a, 
+                    question.answer_b, 
+                    question.answer_c, 
+                    question.answer_d
+                ][question.correct_answer_id - 1]  # Get the correct answer text
+            } for question in questions
+        ]
 
-    return render_template('quiz.html', questions=questions)
+        flash(f'You scored {score} out of {total_questions}.', 'success')
+        return redirect(url_for('quiz_results'))
+
+    return render_template('quiz.html', questions=questions, form=form)  # Pass form to template
+
+@app.route('/quiz/results', methods=['GET', 'POST'])
+@login_required
+def quiz_results():
+    # Assuming we pass the score and questions when redirecting to this route
+    score = session.get('score', 0)
+    total_questions = session.get('total_questions', 0)
+    questions = session.get('questions', [])
+    
+    # Clear session data after displaying results
+    session.pop('score', None)
+    session.pop('total_questions', None)
+    session.pop('questions', None)
+
+    return render_template('quiz_results.html', score=score, total_questions=total_questions, questions=questions)
 
 @app.route('/add_question', methods=['GET', 'POST'])
 @login_required
